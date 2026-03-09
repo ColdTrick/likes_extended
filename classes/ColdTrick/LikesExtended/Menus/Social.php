@@ -2,6 +2,7 @@
 
 namespace ColdTrick\LikesExtended\Menus;
 
+use Elgg\Likes\DataService;
 use Elgg\Menu\MenuItems;
 
 /**
@@ -30,15 +31,10 @@ class Social {
 		$return = $event->getValue();
 		
 		$subtypes = likes_extended_get_subtypes();
+		$dataservice = DataService::instance();
 		
 		foreach ($subtypes as $subtype => $config) {
-			$is_liked = (bool) elgg_get_annotations([
-				'guid' => $entity->guid,
-				'annotation_name' => 'likes',
-				'annotation_value' => $subtype,
-				'annotation_owner_guid' => elgg_get_logged_in_user_guid(),
-				'count' => true,
-			]);
+			$is_liked = $dataservice->currentUserLikesEntity($entity->guid, $subtype);
 			
 			$class = '';
 			if ($is_liked) {

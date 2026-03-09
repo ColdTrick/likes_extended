@@ -1,5 +1,7 @@
 <?php
 
+use ColdTrick\LikesExtended\Bootstrap;
+
 require_once(__DIR__ . '/lib/functions.php');
 
 return [
@@ -11,6 +13,7 @@ return [
 			],
 		],
 	],
+	'bootstrap' => Bootstrap::class,
 	'actions' => [
 		'likes/add' => [],
 	],
@@ -18,7 +21,13 @@ return [
 		'register' => [
 			'menu:social' => [
 				'\ColdTrick\LikesExtended\Menus\Social::register' => [],
-				'Elgg\Likes\Menus\Social::register' => ['unregister' => true],
+				'\Elgg\Likes\Menus\Social::register' => ['unregister' => true],
+			],
+		],
+		'view_vars' => [
+			'page/components/list' => [
+				'\Elgg\Likes\Preloader::preload' => ['unregister' => true],
+				'\ColdTrick\LikesExtended\Likes\Preloader::preload' => [],
 			],
 		],
 	],
