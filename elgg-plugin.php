@@ -18,6 +18,17 @@ return [
 		'likes/add' => [],
 	],
 	'events' => [
+		'ajax_response' => [
+			'all' => [
+				\Elgg\Likes\AjaxResponseHandler::class => ['unregister' => true],
+				\ColdTrick\LikesExtended\Likes\AjaxResponseHandler::class => [],
+			],
+		],
+		'elgg.data' => [
+			'page' => [
+				\Elgg\Likes\JsConfigHandler::class => ['unregister' => true],
+			],
+		],
 		'register' => [
 			'menu:social' => [
 				'\ColdTrick\LikesExtended\Menus\Social::register' => [],
@@ -28,6 +39,13 @@ return [
 			'page/components/list' => [
 				'\Elgg\Likes\Preloader::preload' => ['unregister' => true],
 				'\ColdTrick\LikesExtended\Likes\Preloader::preload' => [],
+			],
+		],
+	],
+	'notifications' => [
+		'annotation' => [
+			'likes' => [
+				'create' => \ColdTrick\LikesExtended\Likes\CreateLikesEventHandler::class,
 			],
 		],
 	],

@@ -113,6 +113,26 @@ class DataService {
 		
 		return $this->num_likes[$guid][$subtype] ?? 0;
 	}
+	
+	/**
+	 * Get the total number of likes for an entity
+	 *
+	 * @param \ElggEntity $entity entity to check
+	 *
+	 * @return int
+	 */
+	public function getTotalNumLikes(\ElggEntity $entity): int {
+		if (!isset($this->num_likes[$entity->guid])) {
+			$this->getNumLikes($entity);
+		}
+		
+		$total = 0;
+		foreach ($this->num_likes[$entity->guid] as $count) {
+			$total += $count;
+		}
+		
+		return $total;
+	}
 
 	/**
 	 * Get a DataService instance

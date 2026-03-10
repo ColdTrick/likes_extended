@@ -40,4 +40,9 @@ if (!$annotation_id) {
 	return elgg_error_response(elgg_echo('likes:failure'));
 }
 
-return elgg_ok_response('', elgg_echo('likes:likes'));
+$key = 'likes:likes';
+if (elgg_language_key_exists("likes_extended:{$subtype}:action:success")) {
+	$key = "likes_extended:{$subtype}:action:success";
+}
+
+return elgg_ok_response('', elgg_echo($key));

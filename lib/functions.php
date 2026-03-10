@@ -15,9 +15,6 @@ function likes_extended_get_subtypes(): array {
 			'add_text' => elgg_echo('likes:likethis'),
 			'remove_text' => elgg_echo('likes:remove'),
 		],
-		'cheers' => [
-			'icon' => 'glass-cheers',
-		],
 	];
 	
 	return elgg_trigger_event_results('likes:subtypes', 'likes_extended', [], $defaults);

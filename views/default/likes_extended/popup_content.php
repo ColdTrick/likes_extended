@@ -2,8 +2,8 @@
 
 use Elgg\Database\Clauses\OrderByClause;
 
-$guid = (int) get_input('guid');
-$subtype = get_input('subtype', 'likes');
+$guid = (int) elgg_extract('guid', $vars);
+$subtype = elgg_extract('subtype', $vars, 'likes');
 
 if (!get_entity($guid)) {
 	echo elgg_echo('error:missing_data');
@@ -21,10 +21,3 @@ $list = elgg_list_annotations([
 ]);
 
 echo elgg_format_element('div', ['class' => 'elgg-likes-popup'], $list);
-
-?>
-<script type='module'>
-	import lightbox from 'elgg/lightbox';
-	
-	lightbox.resize();
-</script>
