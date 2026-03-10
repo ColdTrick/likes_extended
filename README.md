@@ -14,17 +14,16 @@ Extending Like options
 Register a callback to the event ```'likes:subtypes', 'likes_extended'```. The return must be an array:
 
 ```php
+elgg_register_event_handler('likes:subtypes', 'likes_extended', function (\Elgg\Event $event): array {
+	$result = $event->getValue();
+	
+	// my custom like
+	$result['my_like_type'] = [
+		'icon' => 'cheers',
+	];
 
-	elgg_register_event_handler('likes:subtypes', 'likes_extended', function (\Elgg\Event $event): array {
-		$result = $event->getValue();
-		
-		// my custom like
-		$result['my_like_type'] = [
-			'icon' => 'cheers',
-		];
-
-		return $result;
-	}
+	return $result;
+}
 ```
 
 Also add the following language keys:
