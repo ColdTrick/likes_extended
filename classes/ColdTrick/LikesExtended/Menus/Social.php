@@ -39,9 +39,13 @@ class Social {
 			$is_liked = $dataservice->currentUserLikesEntity($entity->guid, $subtype);
 			$count = $dataservice->getNumLikes($entity, $subtype);
 			
-			$class = '';
+			$class = [];
+			if ($count) {
+				$class[] = 'elgg-likes-has-badge';
+			}
+			
 			if ($is_liked) {
-				$class = 'elgg-state-active';
+				$class[] = 'elgg-state-active';
 				$action = elgg_generate_action_url('likes/delete', [
 					'guid' => $entity->guid,
 				]);
