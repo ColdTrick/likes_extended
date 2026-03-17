@@ -9,6 +9,12 @@
  * @return array
  */
 function likes_extended_get_subtypes(): array {
+	static $result;
+	
+	if (isset($result)) {
+		return $result;
+	}
+		
 	$defaults = [
 		'likes' => [
 			'icon' => 'thumbs-up',
@@ -17,5 +23,7 @@ function likes_extended_get_subtypes(): array {
 		],
 	];
 	
-	return elgg_trigger_event_results('likes:subtypes', 'likes_extended', [], $defaults);
+	$result = elgg_trigger_event_results('likes:subtypes', 'likes_extended', [], $defaults);
+	
+	return $result;
 }
