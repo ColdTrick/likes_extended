@@ -16,6 +16,7 @@ return [
 	'bootstrap' => Bootstrap::class,
 	'actions' => [
 		'likes/add' => [],
+		'likes/delete' => [],
 	],
 	'events' => [
 		'ajax_response' => [

@@ -31,8 +31,9 @@ Also add the following language keys:
 - ``likes_extended:<my_like_type>:menu:add`` used in the social menu as title when adding your like type
 - ``likes_extended:<my_like_type>:menu:remove`` used in the social menu as title when removing your like type
 - ``likes_extended:<my_like_type>:tab`` used when viewing the likes details to generate a tab text
-- ``likes_extended:<my_like_type>:annotation`` used when viewing the likes details as a annotation title
+- ``likes_extended:<my_like_type>:annotation`` used when viewing the likes details as an annotation title
 - ``likes_extended:<my_like_type>:action:success`` used as a success message after clicking your like type
+- ``likes_extended:<my_like_type>:action:deleted`` used as a success message after removing your like type
 - ``likes_extended:<my_like_type>:notification:subject`` used as the notification subject for your like type
 - ``likes_extended:<my_like_type>:notification:summary`` used as the notification summary for your like type
 - ``likes_extended:<my_like_type>:notification:body`` used as the notification body for your like type
