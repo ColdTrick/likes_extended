@@ -29,6 +29,11 @@ class Social {
 		}
 		
 		$likes_extended_dropdown = (bool) $event->getParam('likes_extended_dropdown', false);
+		$likes_extended_stats = (bool) $event->getParam('likes_extended_stats', false);
+		if ($likes_extended_stats) {
+			$likes_extended_dropdown = false;
+		}
+		
 		$menu_name = elgg_extract(1, explode(':', $event->getType()));
 		
 		/** @var MenuItems $return */
@@ -40,10 +45,16 @@ class Social {
 		}
 		
 		$dataservice = DataService::instance();
+		$total = $dataservice->getTotalNumLikes($entity);
+		if ($likes_extended_stats && $total < 1) {
+			return null;
+		}
+		
 		$base_priority = 1000000;
 		$top_item = null;
 		$top_priority = 0;
 		$top_item_locked = false;
+		$like_items = [];
 		
 		foreach ($subtypes as $subtype => $config) {
 			$is_liked = $dataservice->currentUserLikesEntity($entity->guid, $subtype);
@@ -99,7 +110,7 @@ class Social {
 				$top_priority = $count;
 			}
 			
-			$return[] = $item;
+			$like_items[] = $item;
 		}
 		
 		if ($likes_extended_dropdown) {
@@ -123,17 +134,38 @@ class Social {
 			]);
 		}
 		
+		if (!$likes_extended_stats) {
+			$return->merge($like_items);
+		}
+		
 		// view listing
-		$total = $dataservice->getTotalNumLikes($entity);
 		if ($total == 1) {
 			$likes_string = elgg_echo('likes_extended:num_likes:text:single', [$total]);
 		} else {
 			$likes_string = elgg_echo('likes_extended:num_likes:text:plural', [Values::shortFormatOutput($total)]);
 		}
 		
+		if ($likes_extended_stats) {
+			$return[] = \ElggMenuItem::factory([
+				'name' => 'likes_stats',
+				'href' => elgg_generate_url('ajax', [
+					'segments' => 'view/likes/popup',
+					'guid' => $entity->guid,
+				]),
+				'icon' => $top_item->icon,
+				'text' => $likes_string,
+				'title' => elgg_echo('likes_extended:num_likes:title'),
+				'link_class' => $top_item->getLinkClass() . ' elgg-lightbox',
+				'data-colorbox-opts' => json_encode([
+					'maxHeight' => '85%',
+				]),
+				'priority' => $base_priority,
+			]);
+		}
+		
 		$return[] = \ElggMenuItem::factory([
 			'name' => 'likes_count',
-			'text' => $likes_extended_dropdown ? $total : $likes_string,
+			'text' => $likes_extended_dropdown || $likes_extended_stats ? $total : $likes_string,
 			'title' => elgg_echo('likes_extended:num_likes:title'),
 			'href' => elgg_generate_url('ajax', [
 				'segments' => 'view/likes/popup',
