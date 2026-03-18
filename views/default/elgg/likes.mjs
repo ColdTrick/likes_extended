@@ -18,7 +18,7 @@ function set_counts(guid, num_likes) {
 	});
 }
 
-$(document).on('click', 'li[data-menu-item^="likes_"][data-menu-item!="likes_count"] a', function () {
+$(document).on('click', 'li[data-menu-item^="likes_"][data-menu-item!="likes_count"][data-menu-item!="likes_dropdown"] a', function () {
 	let ajax = new Ajax();
 	const $parent_menu = $(this).closest('.elgg-menu'),
 		menu_item_name = $(this).closest('li').data().menuItem;

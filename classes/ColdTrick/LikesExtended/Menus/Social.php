@@ -28,12 +28,22 @@ class Social {
 			return null;
 		}
 		
+		$likes_extended_dropdown = (bool) $event->getParam('likes_extended_dropdown', false);
+		$menu_name = elgg_extract(1, explode(':', $event->getType()));
+		
 		/** @var MenuItems $return */
 		$return = $event->getValue();
 		
 		$subtypes = likes_extended_get_subtypes();
+		if (count($subtypes) < 2) {
+			$likes_extended_dropdown = false;
+		}
+		
 		$dataservice = DataService::instance();
 		$base_priority = 1000000;
+		$top_item = null;
+		$top_priority = 0;
+		$top_item_locked = false;
 		
 		foreach ($subtypes as $subtype => $config) {
 			$is_liked = $dataservice->currentUserLikesEntity($entity->guid, $subtype);
@@ -64,17 +74,52 @@ class Social {
 				}
 			}
 			
-			$return[] = \ElggMenuItem::factory([
+			$item = \ElggMenuItem::factory([
 				'name' => "likes_{$subtype}",
 				'href' => $action,
 				'icon' => elgg_extract('icon', $config),
-				'class' => $class,
+				'link_class' => $class,
 				'text' => $text,
 				'badge' => $count ?: null,
 				'title' => $text,
 				'data-likes-guid' => $entity->guid,
 				'deps' => ['elgg/likes'],
 				'priority' => $base_priority - $count,
+				'parent_name' => $likes_extended_dropdown ? 'likes_dropdown' : null,
+			]);
+			
+			if ($is_liked) {
+				$top_item = $item;
+				$top_item_locked = true;
+			} elseif (!isset($top_item)) {
+				$top_item = $item;
+				$top_priority = $count;
+			} elseif (!$top_item_locked && $count > $top_priority) {
+				$top_item = $item;
+				$top_priority = $count;
+			}
+			
+			$return[] = $item;
+		}
+		
+		if ($likes_extended_dropdown) {
+			$return[] = \ElggMenuItem::factory([
+				'name' => 'likes_dropdown',
+				'href' => false,
+				'icon' => $top_item->icon,
+				'text' => elgg_echo('likes_extended:menu:social:likes_dropdown:text'),
+				'title' => elgg_echo('likes_extended:menu:social:likes_dropdown:title'),
+				'link_class' => $top_item->getLinkClass(),
+				'priority' => $base_priority,
+				'child_menu' => [
+					'display' => 'dropdown',
+					'data-position' => json_encode([
+						'at' => 'right bottom',
+						'my' => 'right top',
+						'collision' => 'fit fit',
+					]),
+					'class' => "elgg-{$menu_name}-dropdown-menu",
+				],
 			]);
 		}
 		
@@ -88,7 +133,7 @@ class Social {
 		
 		$return[] = \ElggMenuItem::factory([
 			'name' => 'likes_count',
-			'text' => $likes_string,
+			'text' => $likes_extended_dropdown ? $total : $likes_string,
 			'title' => elgg_echo('likes_extended:num_likes:title'),
 			'href' => elgg_generate_url('ajax', [
 				'segments' => 'view/likes/popup',
@@ -105,5 +150,25 @@ class Social {
 		]);
 		
 		return $return;
+	}
+	
+	/**
+	 * Make the comments social menu into a likes dropdown
+	 *
+	 * @param \Elgg\Event $event 'parameters', 'menu:social'
+	 *
+	 * @return array|null
+	 */
+	public static function commentParameters(\Elgg\Event $event): ?array {
+		$entity = $event->getEntityParam();
+		if (!$entity instanceof \ElggComment) {
+			return null;
+		}
+		
+		$result = $event->getValue();
+		
+		$result['likes_extended_dropdown'] = (bool) elgg_extract('likes_extended_dropdown', $result, true);
+		
+		return $result;
 	}
 }

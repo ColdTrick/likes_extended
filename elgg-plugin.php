@@ -30,6 +30,11 @@ return [
 				\Elgg\Likes\JsConfigHandler::class => ['unregister' => true],
 			],
 		],
+		'parameters' => [
+			'menu:social' => [
+				'\ColdTrick\LikesExtended\Menus\Social::commentParameters' => [],
+			],
+		],
 		'register' => [
 			'menu:social' => [
 				'\ColdTrick\LikesExtended\Menus\Social::register' => [],
