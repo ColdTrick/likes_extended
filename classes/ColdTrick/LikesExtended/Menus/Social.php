@@ -122,6 +122,7 @@ class Social {
 				'title' => elgg_echo('likes_extended:menu:social:likes_dropdown:title'),
 				'link_class' => $top_item->getLinkClass(),
 				'priority' => $base_priority,
+				'data-likes-guid' => $entity->guid,
 				'child_menu' => [
 					'display' => 'dropdown',
 					'data-position' => json_encode([
@@ -156,6 +157,7 @@ class Social {
 				'text' => $likes_string,
 				'title' => elgg_echo('likes_extended:num_likes:title'),
 				'link_class' => $top_item->getLinkClass() . ' elgg-lightbox',
+				'data-likes-guid' => $entity->guid,
 				'data-colorbox-opts' => json_encode([
 					'maxHeight' => '85%',
 				]),
