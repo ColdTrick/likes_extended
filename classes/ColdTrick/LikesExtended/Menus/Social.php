@@ -66,7 +66,7 @@ class Social {
 			}
 			
 			if ($is_liked) {
-				$class[] = 'elgg-state-active';
+				$class[] = 'elgg-state-selected';
 				$action = elgg_generate_action_url('likes/delete', [
 					'guid' => $entity->guid,
 				]);

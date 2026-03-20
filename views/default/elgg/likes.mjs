@@ -1,11 +1,21 @@
 import 'jquery';
 import Ajax from 'elgg/Ajax';
 import hooks from 'elgg/hooks';
+import popup from 'elgg/popup';
 
 function update_like_menu_items(guid, menu_items) {
 	$.each(menu_items, function (index, elem) {
 		$('li[data-menu-item="' + index + '"] a[data-likes-guid=' + guid + ']').each(function() {
-			$(this).replaceWith(elem);
+			const $target = $(this).data('dropdownMenu');
+			if ($target !== undefined) {
+				let $link = $(elem).filter('a');
+				
+				$(this).removeClass('elgg-state-selected');
+				$(this).addClass($link.attr('class'));
+				$(this).html($link.html());
+			} else {
+				$(this).replaceWith(elem);
+			}
 		});
 	});
 }
@@ -26,6 +36,7 @@ $(document).on('click', 'li[data-menu-item^="likes_"][data-menu-item!="likes_cou
 	ajax.action($(this).prop('href'), {
 		success: function() {
 			$parent_menu.find('li[data-menu-item="' + menu_item_name + '"] > a').focus();
+			popup.close();
 		}
 	});
 
