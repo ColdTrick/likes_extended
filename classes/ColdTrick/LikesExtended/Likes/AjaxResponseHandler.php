@@ -46,6 +46,10 @@ class AjaxResponseHandler {
 				continue;
 			}
 			
+			if ($item->getName() === 'likes_dropdown') {
+				$item->addLinkClass('elgg-menu-parent');
+			}
+			
 			$status['menu'][$item->getName()] = elgg_view('navigation/menu/elements/item/url', [
 				'item' => $item,
 			]);
