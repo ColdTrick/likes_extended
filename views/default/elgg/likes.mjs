@@ -4,20 +4,34 @@ import hooks from 'elgg/hooks';
 import popup from 'elgg/popup';
 
 function update_like_menu_items(guid, menu_items) {
+	let selectedDropdown = false;
+	let $selector = $('li[data-menu-item="likes_dropdown"] a[data-likes-guid=' + guid + ']').closest('li');
+	$selector.removeClass('elgg-has-selected-child');
+	
 	$.each(menu_items, function (index, elem) {
 		$('li[data-menu-item="' + index + '"] a[data-likes-guid=' + guid + ']').each(function() {
 			const $target = $(this).data('dropdownMenu');
+			let $link = $(elem).filter('a');
+			
+			$(this).closest('li').removeClass('elgg-state-selected');
+			if ($link.data('likesSelected')) {
+				$(this).closest('li').addClass('elgg-state-selected');
+				selectedDropdown = true;
+			}
+			
 			if ($target !== undefined) {
-				let $link = $(elem).filter('a');
-				
-				$(this).removeClass('elgg-state-selected');
 				$(this).addClass($link.attr('class'));
+				$(this).data($link.data());
 				$(this).html($link.html());
 			} else {
 				$(this).replaceWith(elem);
 			}
 		});
 	});
+	
+	if (selectedDropdown) {
+		$selector.addClass('elgg-has-selected-child');
+	}
 }
 
 function set_counts(guid, num_likes) {

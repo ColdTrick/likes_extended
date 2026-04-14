@@ -66,7 +66,6 @@ class Social {
 			}
 			
 			if ($is_liked) {
-				$class[] = 'elgg-state-selected';
 				$action = elgg_generate_action_url('likes/delete', [
 					'guid' => $entity->guid,
 				]);
@@ -94,6 +93,8 @@ class Social {
 				'badge' => $count ?: null,
 				'title' => $text,
 				'data-likes-guid' => $entity->guid,
+				'data-likes-selected' => $is_liked,
+				'selected' => $is_liked,
 				'deps' => ['elgg/likes'],
 				'priority' => $base_priority - $count,
 				'parent_name' => $likes_extended_dropdown ? 'likes_dropdown' : null,
@@ -123,6 +124,7 @@ class Social {
 				'link_class' => $top_item->getLinkClass(),
 				'priority' => $base_priority,
 				'data-likes-guid' => $entity->guid,
+				'data-likes-selected' => $top_item_locked,
 				'child_menu' => [
 					'display' => 'dropdown',
 					'data-position' => json_encode([
