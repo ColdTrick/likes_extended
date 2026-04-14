@@ -13,6 +13,8 @@ function update_like_menu_items(guid, menu_items) {
 			const $target = $(this).data('dropdownMenu');
 			let $link = $(elem).filter('a');
 			
+			$(this).removeClass('elgg-likes-has-badge');
+			
 			$(this).closest('li').removeClass('elgg-state-selected');
 			if ($link.data('likesSelected')) {
 				$(this).closest('li').addClass('elgg-state-selected');
