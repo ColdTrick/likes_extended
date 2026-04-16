@@ -69,6 +69,7 @@ if (count($tabs) === 1) {
 echo elgg_view('page/components/tabs', [
 	'tabs' => $tabs,
 	'class' => 'likes-extended-detail-tabs',
+	'enable_overflow' => false,
 ]);
 
 ?>
