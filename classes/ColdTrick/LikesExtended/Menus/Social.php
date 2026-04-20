@@ -69,18 +69,22 @@ class Social {
 				$action = elgg_generate_action_url('likes/delete', [
 					'guid' => $entity->guid,
 				]);
-				$text = elgg_extract('remove_text', $config, $subtype);
-				if (empty($text) && elgg_language_key_exists("likes_extended:{$subtype}:menu:remove")) {
+				
+				if (elgg_language_key_exists("likes_extended:{$subtype}:menu:remove")) {
 					$text = elgg_echo("likes_extended:{$subtype}:menu:remove");
+				} else {
+					$text = elgg_extract('remove_text', $config, $subtype);
 				}
 			} else {
 				$action = elgg_generate_action_url('likes/add', [
 					'guid' => $entity->guid,
 					'subtype' => $subtype,
 				]);
-				$text = elgg_extract('add_text', $config, $subtype);
-				if (empty($text) && elgg_language_key_exists("likes_extended:{$subtype}:menu:add")) {
+				
+				if (elgg_language_key_exists("likes_extended:{$subtype}:menu:add")) {
 					$text = elgg_echo("likes_extended:{$subtype}:menu:add");
+				} else {
+					$text = elgg_extract('add_text', $config, $subtype);
 				}
 			}
 			
