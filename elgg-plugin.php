@@ -6,7 +6,7 @@ require_once(__DIR__ . '/lib/functions.php');
 
 return [
 	'plugin' => [
-		'version' => '0.1',
+		'version' => '1.0',
 		'dependencies' => [
 			'likes' => [
 				'position' => 'after',
