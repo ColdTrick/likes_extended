@@ -55,6 +55,11 @@ return [
 			],
 		],
 	],
+	'view_extensions' => [
+		'elgg.css' => [
+			'likes_extended/site.css' => [],
+		],
+	],
 	'view_options' => [
 		'likes_extended/popup_content' => ['ajax' => true],
 	],

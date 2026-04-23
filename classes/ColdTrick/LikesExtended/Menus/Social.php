@@ -171,9 +171,17 @@ class Social {
 			]);
 		}
 		
+		$item_class = [];
+		if ($total === 0) {
+			$item_class[] = 'hidden';
+		}
+		
+		$text = elgg_format_element('span', ['class' => 'likes-extended-count-string'], $likes_string);
+		$text .= elgg_format_element('span', ['class' => 'likes-extended-count-number'], $total);
+		
 		$return[] = \ElggMenuItem::factory([
 			'name' => 'likes_count',
-			'text' => $likes_extended_dropdown || $likes_extended_stats ? $total : $likes_string,
+			'text' => $text,
 			'title' => elgg_echo('likes_extended:num_likes:title'),
 			'href' => elgg_generate_url('ajax', [
 				'segments' => 'view/likes/popup',
@@ -183,7 +191,7 @@ class Social {
 			'data-colorbox-opts' => json_encode([
 				'maxHeight' => '85%',
 			]),
-			'item_class' => $total === 0 ? 'hidden' : '',
+			'item_class' => $item_class,
 			'link_class' => 'elgg-lightbox',
 			'deps' => ['elgg/likes'],
 			'priority' => $base_priority,

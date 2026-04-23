@@ -1,0 +1,13 @@
+.likes-extended-count-number {
+	display: none;
+}
+
+.elgg-item {
+	.likes-extended-count-string {
+		display: none;
+	}
+
+	.likes-extended-count-number {
+		display: inline;
+	}
+}
