@@ -1,6 +1,10 @@
 Version history
 ===============
 
+1.0.1 (2026-05-06):
+
+- fixed: styling of likes count
+
 1.0 (2026-04-21):
 
 - initial release
