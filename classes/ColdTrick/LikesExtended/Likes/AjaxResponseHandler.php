@@ -15,9 +15,9 @@ class AjaxResponseHandler {
 	 *
 	 * @param \Elgg\Event $event 'ajax_response', 'all'
 	 *
-	 * @return AjaxResponse|null
+	 * @return \stdClass|null
 	 */
-	public function __invoke(\Elgg\Event $event): ?AjaxResponse {
+	public function __invoke(\Elgg\Event $event): ?\stdClass {
 		$entity = get_entity((int) get_input('guid'));
 		if (!$entity || elgg_get_viewtype() !== 'default') {
 			return null;
@@ -27,7 +27,7 @@ class AjaxResponseHandler {
 			return null;
 		}
 		
-		/** @var AjaxResponse $response */
+		/** @var \stdClass $response */
 		$response = $event->getValue();
 		
 		$menu = _elgg_services()->menus->getUnpreparedMenu('social', [
@@ -55,7 +55,7 @@ class AjaxResponseHandler {
 			]);
 		}
 		
-		$response->getData()->likes_status = $status;
+		$response->likes_status = $status;
 		
 		return $response;
 	}

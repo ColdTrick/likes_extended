@@ -1,12 +1,18 @@
 <?php
 
+use Elgg\Exceptions\Http\UnauthorizedException;
 use Elgg\Likes\DataService;
 
 $guid = (int) get_input('guid');
+
 $entity = get_entity($guid);
-if (!$entity instanceof \ElggEntity) {
+if (!$entity instanceof \ElggEntity || !$entity->hasCapability('likable')) {
 	echo elgg_echo('error:missing_data');
 	return;
+}
+
+if (!(bool) elgg_get_plugin_setting('details', 'likes') && !$entity->canEdit()) {
+	throw new UnauthorizedException();
 }
 
 $tabs = [];
@@ -44,7 +50,8 @@ foreach ($subtypes as $subtype => $config) {
 		]);
 	} else {
 		$href = elgg_generate_url('ajax', [
-			'segments' => 'view/likes_extended/popup_content',
+			'type' => 'view',
+			'segments' => 'likes_extended/popup_content',
 			'subtype' => $subtype,
 			'guid' => $guid,
 		]);

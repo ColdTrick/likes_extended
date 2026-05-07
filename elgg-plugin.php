@@ -19,7 +19,7 @@ return [
 		'likes/delete' => [],
 	],
 	'events' => [
-		'ajax_response' => [
+		'ajax_results' => [
 			'all' => [
 				\Elgg\Likes\AjaxResponseHandler::class => ['unregister' => true],
 				\ColdTrick\LikesExtended\Likes\AjaxResponseHandler::class => [],
@@ -51,7 +51,10 @@ return [
 	'notifications' => [
 		'annotation' => [
 			'likes' => [
-				'create' => \ColdTrick\LikesExtended\Likes\CreateLikesEventHandler::class,
+				'create' => [
+					\ColdTrick\LikesExtended\Likes\CreateLikesEventHandler::class => [],
+					\Elgg\Likes\Notifications\CreateLikesEventHandler::class => ['unregister' => true],
+				],
 			],
 		],
 	],

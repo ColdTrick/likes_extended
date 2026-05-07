@@ -146,6 +146,8 @@ class Social {
 		}
 		
 		// view listing
+		$show_details = (bool) elgg_get_plugin_setting('details', 'likes') || $entity->canEdit();
+		
 		if ($total == 1) {
 			$likes_string = elgg_echo('likes_extended:num_likes:text:single', [$total]);
 		} else {
@@ -153,22 +155,31 @@ class Social {
 		}
 		
 		if ($likes_extended_stats) {
-			$return[] = \ElggMenuItem::factory([
+			$options = [
 				'name' => 'likes_stats',
-				'href' => elgg_generate_url('ajax', [
-					'segments' => 'view/likes/popup',
-					'guid' => $entity->guid,
-				]),
+				'href' => false,
 				'icon' => $top_item->icon,
 				'text' => $likes_string,
-				'title' => elgg_echo('likes_extended:num_likes:title'),
-				'link_class' => $top_item->getLinkClass() . ' elgg-lightbox',
+				'link_class' => $top_item->getLinkClass(),
 				'data-likes-guid' => $entity->guid,
-				'data-colorbox-opts' => json_encode([
-					'maxHeight' => '85%',
-				]),
 				'priority' => $base_priority,
-			]);
+			];
+			
+			if ($show_details) {
+				$options['data-colorbox-opts'] = json_encode([
+					'maxHeight' => '85%',
+					'href' => elgg_generate_url('ajax', [
+						'type' => 'view',
+						'segments' => 'likes/popup',
+						'guid' => $entity->guid,
+					]),
+				]);
+				
+				$options['link_class'] .= ' elgg-lightbox';
+				$options['title'] = elgg_echo('likes_extended:num_likes:title');
+			}
+			
+			$return[] = \ElggMenuItem::factory($options);
 		}
 		
 		$item_class = [];
@@ -179,23 +190,31 @@ class Social {
 		$text = elgg_format_element('span', ['class' => 'likes-extended-count-string'], $likes_string);
 		$text .= elgg_format_element('span', ['class' => 'likes-extended-count-number'], $total);
 		
-		$return[] = \ElggMenuItem::factory([
+		$options = [
 			'name' => 'likes_count',
 			'text' => $text,
-			'title' => elgg_echo('likes_extended:num_likes:title'),
-			'href' => elgg_generate_url('ajax', [
-				'segments' => 'view/likes/popup',
-				'guid' => $entity->guid,
-			]),
+			'href' => false,
 			'data-likes-guid' => $entity->guid,
-			'data-colorbox-opts' => json_encode([
-				'maxHeight' => '85%',
-			]),
 			'item_class' => $item_class,
-			'link_class' => 'elgg-lightbox',
 			'deps' => ['elgg/likes'],
 			'priority' => $base_priority,
-		]);
+		];
+		
+		if ($show_details) {
+			$options['data-colorbox-opts'] = json_encode([
+				'maxHeight' => '85%',
+				'href' => elgg_generate_url('ajax', [
+					'type' => 'view',
+					'segments' => 'likes/popup',
+					'guid' => $entity->guid,
+				]),
+			]);
+			
+			$options['link_class'] = 'elgg-lightbox';
+			$options['title'] = elgg_echo('likes_extended:num_likes:title');
+		}
+		
+		$return[] = \ElggMenuItem::factory($options);
 		
 		return $return;
 	}
