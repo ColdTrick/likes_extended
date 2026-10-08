@@ -77,13 +77,3 @@ echo elgg_view('page/components/tabs', [
 	'tabs' => $tabs,
 	'class' => 'likes-extended-detail-tabs',
 ]);
-
-?>
-<script type="module">
-	import 'jquery';
-	
-	$(document).on('open', '.elgg-tabs-component.likes-extended-detail-tabs .elgg-tabs > li', function() {
-		$(window).trigger('resize.lightbox');
-	});
-	$('#cboxLoadedContent').find('.elgg-menu-navigation-tabs .elgg-components-tab.elgg-state-selected a').trigger('click');
-</script>
